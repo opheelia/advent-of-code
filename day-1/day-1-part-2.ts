@@ -1,25 +1,27 @@
 import * as fs from "node:fs";
 
-let numberOfPassingThroughZero: number = 0;
-
 function main() {
 
     const content: string = fs.readFileSync("./input.txt", "utf8");
     const lines: string[] = content.split("\n");
 
     let dialPosition = 50;
+    let numberOfPassingThroughZero: number = 0;
 
     for (const line of lines) {
-        dialPosition = rotateDial(dialPosition, line);
+        ({ dialPosition, numberOfPassingThroughZero } = rotateDial(dialPosition, line, numberOfPassingThroughZero));
         console.log(`New position : ${dialPosition}`);
     }
 
     console.log(`Number of times the dial passes through zero : ${numberOfPassingThroughZero}.`);
 }
 
-function rotateDial(dialPosition: number, line: string): number {
-    const direction = line.slice(0,1);
-    const rotationNumber = parseInt(line.slice(1,line.length));
+function rotateDial(dialPosition: number, line: string, numberOfPassingThroughZero: number): {
+    dialPosition: number,
+    numberOfPassingThroughZero: number
+} {
+    const direction = line.slice(0, 1);
+    const rotationNumber = parseInt(line.slice(1, line.length));
     console.log(`Direction : ${direction}, rotationNumber: ${rotationNumber}`);
 
     for (let i = 0; i < rotationNumber; i++) {
@@ -40,7 +42,7 @@ function rotateDial(dialPosition: number, line: string): number {
             }
         }
     }
-    return dialPosition;
+    return { dialPosition, numberOfPassingThroughZero };
 }
 
 main();
